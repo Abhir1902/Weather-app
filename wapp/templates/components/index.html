@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        .container{
+            width: 700px;
+            height: 550px; 
+            padding: 50px; 
+            border-radius: 20px;
+            border: 1px solid black; 
+            margin: auto;
+        }
+        .header{
+            display: flex; 
+            justify-content: center; 
+        }
+        .header > div{
+            margin: 20px;
+            border-radius: 20px;
+            border-radius: 30px;
+            box-shadow:  6px 6px 17px #d5d5d5,
+             -6px -6px 17px #ebebeb;
+            width: 200px; 
+            height: 200px;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px;
+        }
+        .temp{
+            margin: 20px;
+            border-radius: 20px;
+            border-radius: 30px;
+            box-shadow:  6px 6px 17px #d5d5d5,
+             -6px -6px 17px #ebebeb;
+            width: 200px; 
+            height: 200px;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px;
+        }
+        .wind,.info{
+            margin: 20px;
+            border-radius: 20px;
+            border-radius: 30px;
+            box-shadow:  6px 6px 17px #d5d5d5,
+             -6px -6px 17px #ebebeb;
+            width: 200px; 
+            height: 200px;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px;
+        }
+        .weather-info > img, .wind > div > img, .info > div > img{
+            margin: auto;
+            border: 1px solid black; 
+            border-radius: 50%;
+        }
+        .wind > div > img{
+            padding: 5px;
+            animation-name: direction;
+            animation-iteration-count: infinite;
+            animation-duration: 2s;
+            animation-delay: 1s;
+        }
+        @keyframes direction{
+            from{
+                rotate: 0deg;
+            }
+            to{
+                rotate: {{ data.wind.deg}}deg;
+            }
+        }
+        .desc{
+            text-transform : capitalize; 
+        }
+        .more-info{
+            display: flex; 
+            justify-content: center;
+        }
+        input[type=text]{
+            height: 30px;
+            text-align: center;
+            border-radius: 50px;
+            width: 250px;
+        }
+    </style>
+</head>
+<body align = "center">
+    <h1>WEATHER APP</h1>
+    <form action="/" method = "post">
+        {% csrf_token %} 
+        {{form}}
+        <input type="submit" value="Submit">
+    </form>
+    {% if data %}
+        <div class="container">
+            <div class="header">
+                <div class="city">
+                    <div class="city-info">
+                        <h1 class = "city-name">{{ data.name }}</h1>
+                        <p>LAT : {{ data.coord.lat }}</p>
+                        <p>LONG : {{ data.coord.lon }}</p>
+                    </div>
+                </div>
+                <div class="weather-info">
+                    {% for i in data.weather %}
+                        <img width = 75px height = 75px  src = 'http://openweathermap.org/img/wn/{{ i.icon }}@2x.png' alt="icon">
+                        <h2 class="weather-type"> {{ i.main }}</h2>
+                        <p class="desc">
+                            {{ i.description }}
+                        </p>
+                    {% endfor %}
+                </div>              
+            </div>
+            <section class="more-info">
+                <div class="temp">
+                    <h3>TEMPERATURE</h3>
+                    {{ data.main.temp }}
+                    <sup>K</sup>
+                    <div class="temp-more-info">
+                        <p class="temp-range">
+                            <strong>MIN TEMP</strong>
+                            <br> 
+                            {{ data.main.temp_min }}
+                            <sup>K</sup>
+                            <br>
+                            <br>
+                            <strong>
+                            MAX TEMP
+                            </strong>
+                            <br> 
+                            {{ data.main.temp_max }}
+                            <sup>K</sup>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="wind">
+                    <div>
+                        <img src="https://static.thenounproject.com/png/3755382-200.png" alt="direction" width = 50px height = 50px>
+                        <h2>WIND</h2>
+                        <br>
+                        <strong>SPEED</strong>
+                        <br>
+                        {{ data.wind.speed }}
+                        <br>
+                    </div>
+                </div>
+                <div class="info">
+                    <div>
+                        <h2>MORE INFO</h2>
+                        <br>
+                        <strong>PRESSURE</strong>
+                        <br>
+                        {{ data.main.pressure }}
+                        <sup>bar</sup>
+                        <br>
+                        <br>
+                        <strong>HUMIDITY</strong>
+                        <br>
+                        {{ data.main.humidity }} %
+                        <br>
+                    </div>
+                </div>
+            </section>
+        </div>   
+    {% endif %}
+</body>
+</html>
