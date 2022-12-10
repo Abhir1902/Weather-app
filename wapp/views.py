@@ -17,7 +17,7 @@ def index(request):
         form = NameForm(request.POST)
         if form.is_valid(): 
             city = form.cleaned_data['location']
-            url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",uk&APPID=58fa257762d477e38d0acc69600c5231"
+            url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",uk&APPID={YOUR_API_KEY}"
             request_API = requests.get(url)
             data = json.loads(request_API.text) 
             if len(data) > 2:
