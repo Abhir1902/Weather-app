@@ -25,8 +25,9 @@ def index(request):
 
                 return render(request,'components/index.html',{'time' : time, 'data' : data, 'form' : form})
             else:
-                form  = NameForm()
-                render(request,"components/index.html",{'form' : form})
+                form = NameForm()
+                return render(request,"components/index.html",{'form' : form , 'errorMessage' : 'City not listed!!'})
+
     else: 
         form = NameForm() 
     

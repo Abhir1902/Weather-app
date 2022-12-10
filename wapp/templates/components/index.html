@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
         .container{
             width: 700px;
             height: 550px; 
@@ -32,7 +33,7 @@
             justify-content: center;
             padding: 10px;
         }
-        .temp{
+        .temp, .info{
             margin: 20px;
             border-radius: 20px;
             border-radius: 30px;
@@ -45,14 +46,14 @@
             justify-content: center;
             padding: 10px;
         }
-        .wind,.info{
+        .wind{
             margin: 20px;
             border-radius: 20px;
             border-radius: 30px;
             box-shadow:  6px 6px 17px #d5d5d5,
              -6px -6px 17px #ebebeb;
             width: 200px; 
-            height: 200px;
+            height: 230px;
             display: flex; 
             flex-direction: column;
             justify-content: center;
@@ -88,8 +89,59 @@
         input[type=text]{
             height: 30px;
             text-align: center;
-            border-radius: 50px;
+            /* border-radius: 50px; */
             width: 250px;
+            border: none; 
+            outline: none;
+        }
+        .form-input{
+            border-radius: 50px;
+            border: 1px solid black; 
+            width: 500px;
+            height: 100px;
+            margin: auto;
+            padding: 10px;
+        }
+        .btn {
+            border: none;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+            text-transform: uppercase;
+            outline: none;
+            overflow: hidden;
+            position: relative;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            background-color: #222;
+            padding: 17px 60px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+            }
+
+        .btn span {
+            position: relative; 
+            z-index: 1;
+        }
+
+        .btn:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 490%;
+            width: 140%;
+            background: #78c7d2;
+            -webkit-transition: all .5s ease-in-out;
+            transition: all .5s ease-in-out;
+            -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+            transform: translateX(-98%) translateY(-25%) rotate(45deg);
+        }
+
+        .btn:hover:after {
+            -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+            transform: translateX(-9%) translateY(-25%) rotate(45deg);
         }
     </style>
 </head>
@@ -97,19 +149,27 @@
     <h1>WEATHER APP</h1>
     <form action="/" method = "post">
         {% csrf_token %} 
-        {{form}}
-        <input type="submit" value="Submit">
+        <div class="form-input">
+            {{form}}
+            <input type="submit" value="Submit" class = 'btn'>
+        </div>        
     </form>
+    <br>
+    <br>
+    {% if errorMessage %}
+        <h1>{{ errorMessage }}</h1>
+    {% endif %}
     {% if data %}
         <div class="container">
             <div class="header">
                 <div class="city">
                     <div class="city-info">
-                        <h1 class = "city-name">{{ data.name }}</h1>
+                        <h3 class = "city-name">{{ data.name|upper }}</h3>
                         <p>LAT : {{ data.coord.lat }}</p>
                         <p>LONG : {{ data.coord.lon }}</p>
                     </div>
                 </div>
+
                 <div class="weather-info">
                     {% for i in data.weather %}
                         <img width = 75px height = 75px  src = 'http://openweathermap.org/img/wn/{{ i.icon }}@2x.png' alt="icon">
@@ -147,6 +207,9 @@
                     <div>
                         <img src="https://static.thenounproject.com/png/3755382-200.png" alt="direction" width = 50px height = 50px>
                         <h2>WIND</h2>
+
+                        {{ data.wind.deg }}<sup>°</sup>
+                        <br>
                         <br>
                         <strong>SPEED</strong>
                         <br>
